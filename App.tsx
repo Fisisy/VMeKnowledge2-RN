@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'; 
+import './gesture-handler';
 // import { NavigationContainer } from '@react-navigation/native';
 // import './gesture-handler';
 // import Index from './src_01_StyleSheet'
@@ -20,13 +22,13 @@ import { Text, View } from 'react-native'
 // import Index from './src_13_Animated'
 // import Index from './src_14_WebView/WebViewHTML'
 // import Index from './src_15_Picker'
-import Index from './src_16_Swiper'
+// import Index from './src_16_Swiper'
 // import Index from './src_17_AsyncStorage'
-// import Index from './src_18_Geolocation'
+// import Index from './src_18_Geolocation's
 // import Index from './src_19_Camera'
 // import Index from './src_21_Loading'
 // import Index from './src_22_StackNavigator'
-// import Index from './src_23_BottomTabNavigator'
+import Index from './src_23_BottomTabNavigator'
 // import Index from './src_24_DrawerNavigator'
 // import Index from './src_25_MaterialTopTabNavigator'
 
@@ -34,9 +36,9 @@ import Index from './src_16_Swiper'
 export default class App extends Component {
   render() {
     return (
-      // <NavigationContainer>
+      <NavigationContainer>
         <Index> </Index>
-      // </NavigationContainer>
+      </NavigationContainer>
     )
   }
 }
