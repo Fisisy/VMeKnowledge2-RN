@@ -27,13 +27,15 @@
     "react": "18.3.1",
     "react-native": "0.76.6",
     "react-native-gesture-handler": "^2.22.0",
+    "react-native-image-picker": "2.x",
     "react-native-pager-view": "^6.7.0",
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-screens": "^4.5.0",
     "react-native-swiper": "^1.6.0",
     "react-native-vision-camera": "^4.6.3",
-    "react-native-webview": "^13.13.1"
+    "react-native-webview": "^13.13.1",
+    "react-native-worklets-core": "^1.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

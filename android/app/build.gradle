@@ -125,6 +125,5 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    // implementation project(':react-native-camera')
 }
 // apply plugin: 'com.google.android.gms.strict-version-matcher-plugin'
