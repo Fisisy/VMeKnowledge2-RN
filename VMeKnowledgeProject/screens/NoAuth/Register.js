@@ -110,9 +110,38 @@ function Registr({navigation}) {
       Alert.alert('错误', '两次输入的密码不一致');
       return;
     }
-
+    let userInfo = {
+      username: data.username,
+      password: data.password,
+    };
+    console.info(userInfo);
     //注册成功后的操作
+    const url = `http://192.168.204.1:8090/register`
     Alert.alert('成功', '注册成功');
+
+
+    try {
+      const response = fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // 设置为 JSON
+        },
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password,
+        }), 
+      });
+      
+      console.log(response);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const result = response.json(); // 获取后端返回的结果
+      console.log(result);
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
 
   };
   return (

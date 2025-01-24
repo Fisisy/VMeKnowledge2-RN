@@ -5,8 +5,17 @@ import { Text, StyleSheet, View, ImageBackground, Platform, ScrollView,
 import * as Animatable from 'react-native-animatable'
 import Ionicons from '@react-native-vector-icons/ionicons'
 import LinearGradient from 'react-native-linear-gradient';
+import {connect} from 'react-redux'
+import {loginSuccess} from '../../redux/actions/User'
 
-export default class Login extends Component {
+const mapStateToProps = state => {
+  return {
+    isLogin: state.User.isLogin,
+    token: state.User.token
+  }
+}
+
+class Login extends Component {
   constructor() {
     super()
     this.state= {
@@ -97,8 +106,30 @@ export default class Login extends Component {
       password: this.state.password,
     };
     //调用接口，执行登录
-    // this.props.loginSuccess(userInfo);
-    Alert.alert('成功', '登录成功');
+    const url = `http://192.168.204.1:8090/login`
+    // try {
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // 设置为 JSON
+      },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }), 
+    }).then(res=>res.json())
+    .then((res) => {
+      // console.log(res.data);
+      if (res.code === 1) {
+
+        // this.props.token = res.data,
+        Alert.alert('成功', '登录成功');
+        this.props.loginSuccess(res.data);
+      }
+      else {
+        Alert.alert('错误', '用户名或密码错误');
+      }
+    })
   }
   render() {
     return (
@@ -197,6 +228,8 @@ export default class Login extends Component {
     )
   }
 }
+
+export default connect(mapStateToProps, {loginSuccess})(Login)
 
 const styles = StyleSheet.create({
   backgroundImage: {

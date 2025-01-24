@@ -6,6 +6,7 @@ import UserScreen from '../screens/User'
 import AboutScreen from '../screens/User/About'
 import LoginScreen from '../screens/NoAuth/Login'
 import RegisterScreen from '../screens/NoAuth/Register'
+import CounterScreen from '../screens/User/Counter'
 
 
 const Stack = createStackNavigator();
@@ -36,28 +37,9 @@ export default class UserStack extends Component {
                   },
                 }}
               />
-              <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                // options={{
-                //   title: '登录', //自定义标题栏的标题
-                //   // 自定义标题栏样式
-                //   headerStyle: {
-                //     backgroundColor: '#fff', // 自定义标题栏背景颜色
-                //   },
-                // }}
-              />
-              <Stack.Screen
-                name="Register"
-                component={RegisterScreen}
-                // options={{
-                //   title: '登录', //自定义标题栏的标题
-                //   // 自定义标题栏样式
-                //   headerStyle: {
-                //     backgroundColor: '#fff', // 自定义标题栏背景颜色
-                //   },
-                // }}
-              />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="Counter" component={CounterScreen} />
             </Stack.Navigator>
     )
   }

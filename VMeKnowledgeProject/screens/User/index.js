@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, SafeAreaView, ScrollView, Image, TouchableOpacity, Alert} from 'react-native'
 import Ionicons from '@react-native-vector-icons/ionicons'
+import {connect} from 'react-redux'
+import {logout} from '../../redux/actions/User'
 
-export default class index extends Component {
+class index extends Component {
+  doLogout = () => {
+    this.props.logout()
+    Alert.alert('成功', '退出成功')
+  }
   render() {
     return (
       <SafeAreaView style= {[styles.container]}>
@@ -45,11 +51,23 @@ export default class index extends Component {
                 <Ionicons name={'chevron-forward-outline'} size= {20} color ={'#bbb'}/>
               </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Alert.alert('aaa')}>
+          <TouchableOpacity onPress={
+            this.doLogout
+            // Alert.alert('成功','退出成功')
+            }>
               <View style = {[styles.listItem]}>
                 <View style = {{flexDirection:'row'}}>
                   <Ionicons name={'log-out-outline'} size= {20} color ={'red'}/>
                   <Text style = {{marginLeft: 10, fontSize: 18}}>退出</Text>
+                </View>
+                <Ionicons name={'chevron-forward-outline'} size= {20} color ={'#bbb'}/>
+              </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Counter')}>
+              <View style = {[styles.listItem]}>
+                <View style = {{flexDirection:'row'}}>
+                  <Ionicons name={'calculator-outline'} size= {20} color ={'#4169E1'}/>
+                  <Text style = {{marginLeft: 10, fontSize: 18}}>计数器</Text>
                 </View>
                 <Ionicons name={'chevron-forward-outline'} size= {20} color ={'#bbb'}/>
               </View>
@@ -59,6 +77,8 @@ export default class index extends Component {
     )
   }
 }
+
+export default connect(null, {logout})(index);
 
 const styles = StyleSheet.create({
   container: {

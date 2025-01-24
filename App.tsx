@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'; 
 import './gesture-handler';
-// import { NavigationContainer } from '@react-navigation/native';
-// import './gesture-handler';
+import {Provider as StoreProvider } from 'react-redux'
+import store from './VMeKnowledgeProject/redux/store'
+
 // import Index from './src_01_StyleSheet'
 // import Index from './src_02_Flexbox/FlexDirection.js'
 // import Index from './src_02_Flexbox/JustifyContent.js'
@@ -37,9 +38,11 @@ import Index from './VMeKnowledgeProject'
 export default class App extends Component {
   render() {
     return (
-      <NavigationContainer>
-        <Index> </Index>
-      </NavigationContainer>
+      <StoreProvider store = {store}>
+        <NavigationContainer>
+          <Index> </Index>
+        </NavigationContainer>
+      </StoreProvider>
     )
   }
 }
