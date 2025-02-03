@@ -105,31 +105,34 @@ class Login extends Component {
       username: this.state.username,
       password: this.state.password,
     };
-    //调用接口，执行登录
-    const url = `http://192.168.204.1:8090/login`
-    // try {
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // 设置为 JSON
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password,
-      }), 
-    }).then(res=>res.json())
-    .then((res) => {
-      // console.log(res.data);
-      if (res.code === 1) {
+    Alert.alert('成功', '登录成功');
+    this.props.loginSuccess(this.state.password);
 
-        // this.props.token = res.data,
-        Alert.alert('成功', '登录成功');
-        this.props.loginSuccess(res.data);
-      }
-      else {
-        Alert.alert('错误', '用户名或密码错误');
-      }
-    })
+    //调用接口，执行登录
+    // const url = `http://192.168.204.1:8090/login`
+    // // try {
+    // fetch(url, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json', // 设置为 JSON
+    //   },
+    //   body: JSON.stringify({
+    //     username: this.state.username,
+    //     password: this.state.password,
+    //   }), 
+    // }).then(res=>res.json())
+    // .then((res) => {
+    //   // console.log(res.data);
+    //   if (res.code === 1) {
+
+    //     // this.props.token = res.data,
+    //     Alert.alert('成功', '登录成功');
+    //     this.props.loginSuccess(res.data);
+    //   }
+    //   else {
+    //     Alert.alert('错误', '用户名或密码错误');
+    //   }
+    // })
   }
   render() {
     return (
@@ -199,7 +202,7 @@ class Login extends Component {
               {
                 this.state.isValidPassword ? null : 
                 <Animatable.View animation={'fadeInLeft'} duration={200}>
-                  <Text style= {[styles.errorMsg]}> 用户名至少为8位 </Text>
+                  <Text style= {[styles.errorMsg]}> 密码至少为8位 </Text>
                 </Animatable.View>
               }
                <View style={[styles.button]}>

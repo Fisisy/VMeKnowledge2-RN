@@ -5,6 +5,7 @@ import Icon from '@react-native-vector-icons/ionicons';
 
 import HomeScreen from './HomeStack'
 import UserScreen from './UserStack'
+import KnowledgeScreen from './Knowledge'
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,8 @@ export default class index extends Component {
           tabBarIcon: ({focused, color, size}) => {
             let iconName = '';
             if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Knowledge') {
               iconName = focused ? 'book' : 'book-outline';
             } else if (route.name === 'User') {
               iconName = focused ? 'person' : 'person-outline';
@@ -29,6 +32,7 @@ export default class index extends Component {
           inactiveTintColor: 'gray', //未激活的颜色
         }}>
         <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Knowledge" component={KnowledgeScreen} />
         <Tab.Screen name="User" component={UserScreen} />
       </Tab.Navigator>
     )

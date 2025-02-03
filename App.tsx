@@ -34,13 +34,16 @@ import store from './VMeKnowledgeProject/redux/store'
 // import Index from './src_24_DrawerNavigator'
 // import Index from './src_25_MaterialTopTabNavigator'
 import Index from './VMeKnowledgeProject'
+// import Index from './src_26_quillEditor'
+// import Index from './src_27_Tiptap'
 
 export default class App extends Component {
   render() {
     return (
       <StoreProvider store = {store}>
         <NavigationContainer>
-          <Index> </Index>
+          <Index>
+          </Index>
         </NavigationContainer>
       </StoreProvider>
     )
