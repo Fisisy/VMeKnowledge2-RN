@@ -6,12 +6,12 @@ import QuillEditor from 'react-native-quill-editor'
 
 const { width } = Dimensions.get('window');
 
-export default class AddKnowledge extends Component {
+export default class ChangeKnowledge extends Component {
   constructor() {
     super()
     this.state= {
-      title: '',
-      htmlData: '',
+      title: '我是一个标题，',
+      htmlData: 'ugofdisjiodghrje',
     }
   }
   render() {
@@ -39,7 +39,7 @@ export default class AddKnowledge extends Component {
           <ScrollView contentInsetAdjustmentBehavior="automatic">
             <QuillEditor
               style={{ height: 310 }}
-              defaultValue=""
+              defaultValue={this.state.htmlData}
               onChange={onChange}
               options={{
                 placeholder: '请赋诗一首...',

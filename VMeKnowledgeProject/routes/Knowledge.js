@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import KnowledgeScreen from '../screens/Knowledge'
 import AddKnowledgeScreen from '../screens/Knowledge/AddKnowledge'
+import ChangeKnowledgeScreen from '../screens/Knowledge/ChangeKnowledge'
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,14 @@ export default class Knowledge extends Component {
                 component={AddKnowledgeScreen}
                 options={{
                   title: '新建芝士', //自定义标题栏的标题
+                  // 自定义标题栏样式
+                }}
+              />
+              <Stack.Screen
+                name="ChangeKnowledge"
+                component={ChangeKnowledgeScreen}
+                options={{
+                  title: '修改芝士', //自定义标题栏的标题
                   // 自定义标题栏样式
                 }}
               />
