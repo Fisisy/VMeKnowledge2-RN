@@ -15,6 +15,8 @@ import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import Icon from '@react-native-vector-icons/ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
+import {getRegister} from '../../API/apis';
+
 function Registr({navigation}) {
   const [data, setData] = React.useState({
     username: '',
@@ -45,7 +47,7 @@ function Registr({navigation}) {
         validateUsername: false,
       });
     }
-    console.log('validateUsername', data.validateUsername);
+    // console.log('validateUsername', data.validateUsername);
   };
   const validatePassword = val => {
     if (val.trim().length >= 8) {
@@ -110,38 +112,25 @@ function Registr({navigation}) {
       Alert.alert('错误', '两次输入的密码不一致');
       return;
     }
-    let userInfo = {
+    const coords = {
       username: data.username,
       password: data.password,
     };
-    console.info(userInfo);
-    //注册成功后的操作
-    const url = `http://192.168.204.1:8090/register`
-    Alert.alert('成功', '注册成功');
-
-
-    try {
-      const response = fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // 设置为 JSON
-        },
-        body: JSON.stringify({
-          username: data.username,
-          password: data.password,
-        }), 
+    getRegister(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // 获取数据成功
+        console.log(res);
+        if (res.code == 1) {
+          Alert.alert('成功', '注册成功');
+        } else {
+          Alert.alert('错误', res.msg);
+        }
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
       });
       
-      console.log(response);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const result = response.json(); // 获取后端返回的结果
-      console.log(result);
-    } catch (error) {
-      console.error('Error posting data:', error);
-    }
 
   };
   return (

@@ -7,6 +7,7 @@ import Ionicons from '@react-native-vector-icons/ionicons'
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux'
 import {loginSuccess} from '../../redux/actions/User'
+import {postLogin} from '../../API/apis'
 
 const mapStateToProps = state => {
   return {
@@ -101,38 +102,31 @@ class Login extends Component {
       Alert.alert('密码太短', '密码最短是8位');
       return;
     }
-    let userInfo = {
+    const coords = {
       username: this.state.username,
       password: this.state.password,
     };
-    Alert.alert('成功', '登录成功');
-    this.props.loginSuccess(this.state.password);
-
+    // Alert.alert('成功', '登录成功');
+    // this.props.loginSuccess(this.state.password);
     //调用接口，执行登录
-    // const url = `http://192.168.204.1:8090/login`
-    // // try {
-    // fetch(url, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json', // 设置为 JSON
-    //   },
-    //   body: JSON.stringify({
-    //     username: this.state.username,
-    //     password: this.state.password,
-    //   }), 
-    // }).then(res=>res.json())
-    // .then((res) => {
-    //   // console.log(res.data);
-    //   if (res.code === 1) {
 
-    //     // this.props.token = res.data,
-    //     Alert.alert('成功', '登录成功');
-    //     this.props.loginSuccess(res.data);
-    //   }
-    //   else {
-    //     Alert.alert('错误', '用户名或密码错误');
-    //   }
-    // })
+    postLogin(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // 获取数据成功
+        console.log(res.data);
+        if (res.code == 1) {
+          Alert.alert('成功', '请求成功');
+          this.props.loginSuccess(res.data);
+        } else {
+          Alert.alert('错误', '用户名或密码错误');
+        }
+        
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
+      });
+      
   }
   render() {
     return (

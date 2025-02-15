@@ -3,20 +3,80 @@ import { TextInput, Button, Dimensions, Platform , Alert} from 'react-native';
 import { WebView } from 'react-native-webview';
 import { SafeAreaView, StyleSheet, ScrollView, StatusBar, View } from 'react-native'
 import QuillEditor from 'react-native-quill-editor'
+import {connect} from 'react-redux'
+import { ChangeKnowledgeApi, GetKnowledgeApiById } from '../../API/apis';
+
 
 const { width } = Dimensions.get('window');
 
-export default class ChangeKnowledge extends Component {
+const mapStateToProps = state => {
+  return {
+    // isLogin: state.User.isLogin,
+    token: state.User.token,
+    knowledgeId: state.GetKnowledgeId.knowledgeId
+  }
+}
+
+
+class ChangeKnowledge extends Component {
   constructor() {
     super()
     this.state= {
-      title: '我是一个标题，',
-      htmlData: 'ugofdisjiodghrje',
+      title: '',
+      htmlData: '',
+      describe: '',
     }
+  }
+  componentDidMount() {
+    const coords = {
+      token: this.props.token,
+      knowledgeId: this.props.knowledgeId,
+    }
+    GetKnowledgeApiById(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // 获取数据成功
+        console.log(res.data);
+        if (res.code == 1) {
+          this.setState({
+            title: res.data.title,
+            describe: res.data.description,
+            htmlData: res.data.content,
+          })
+          
+        } else {
+          Alert.alert('错误', '查找数据发生错误');
+        }
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
+      });
+  }
+  handleChangeKnowledge() {
+    const coords = {
+      token: this.props.token,
+      knowledgeId: this.props.knowledgeId,
+      title: this.state.title,
+      describe: this.state.describe,
+      htmlData: this.state.htmlData,
+    }
+    ChangeKnowledgeApi(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // 获取数据成功
+        // console.log(res);
+        if (res.code == 1) {
+          Alert.alert('成功', '保存成功');
+        } else {
+          Alert.alert('错误', '查找数据发生错误');
+        }
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
+      });
   }
   render() {
     const onChange = (html) => {
-      // console.log(html)
       this.state.htmlData = html
     }
     // const isIOS = Platform.OS === 'ios';
@@ -34,6 +94,14 @@ export default class ChangeKnowledge extends Component {
               this.setState({title: val});
             }}
           />
+          <TextInput
+            value={this.state.describe}
+            style={[styles.input]}
+            placeholder="文章描述"
+            onChangeText={val => {
+              this.setState({describe: val});
+            }}
+          />
         </View>
         <SafeAreaView>
           <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -48,11 +116,7 @@ export default class ChangeKnowledge extends Component {
           </ScrollView>
           <Button
             title="保存"
-            onPress={() => {
-              console.log(this.state.title);
-              console.log(this.state.htmlData);
-              Alert.alert('保存成功');
-            }}
+            onPress={() => this.handleChangeKnowledge()}
             color={'blue'}
           />
         </SafeAreaView>
@@ -62,6 +126,8 @@ export default class ChangeKnowledge extends Component {
     )
   }
 }
+
+export default connect(mapStateToProps, null)(ChangeKnowledge)
 
 const styles = StyleSheet.create({
   body: {

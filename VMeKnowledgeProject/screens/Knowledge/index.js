@@ -1,89 +1,74 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, SafeAreaView, Dimensions, FlatList, View , TouchableOpacity, Alert} from 'react-native'
 import Ionicons from '@react-native-vector-icons/ionicons'
+import {connect} from 'react-redux'
+import { GetKnowledgeApi, GetKnowledgeApiById } from '../../API/apis';
+import {GetKnowledgeId} from '../../redux/actions/GetKnowledgeId'
+
 
 const { width } = Dimensions.get('window');
 const ITEM_SPACING = 5;
 const ITEM_WIDTH = (width - ITEM_SPACING * 3) / 2;
 
-export default class index extends Component {
+const mapStateToProps = state => {
+  return {
+    // num: state.Counter.num,
+    token: state.User.token,
+    knowledgeId: state.GetKnowledgeId.knowledgeId,
+  }
+}
+
+class index extends Component {
+  
   constructor() {
     super();
     this.state = {
       isLoading: false,
       selectedId: null,
-      list: [
-        {
-          id: '1',
-          title: '头条',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '2',
-          title: '娱乐',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '3',
-          title: '体育',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '4',
-          title: '军事',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '5',
-          title: '科技',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '6',
-          title: '财经',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '7',
-          title: '时尚',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '8',
-          title: '社会',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '9',
-          title: '北京',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '10',
-          title: '动漫',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-        {
-          id: '11',
-          title: '国际',
-          data: '12312341',
-          dateTime:'2025年2月3日'
-        },
-      ],
+      deleteId: 0,
+      list: [],
     };
   }
+  // handleList = (ListData) => {
+  //   this.state.list = ListData;
+  // }
+  componentDidMount() {
+    const coords = {
+      token: this.props.token,
+    }
+    GetKnowledgeApi(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // console.log(res.data);
+        if (res.code == 1) {
+          this.setState(
+            (prevState) => ({
+              list: [...prevState.list, ...res.data], // 将现有列表和新数据合并
+            }),
+            () => {
+              // 这里是 setState 的回调函数，状态更新后会执行
+              // console.log(this.state.list); // 打印更新后的列表
+            }
+          );
+        } else {
+          Alert.alert('错误', '查找数据发生错误');
+        }
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
+      });
+  }
+  handleDeleteKnowledge() {
+    console.log(this.props.token);
+    console.log(this.state.deleteId);
+    const coords = {
+      token: this.props.token,
+      knowledgeId: this.state.deleteId,
+    }
+    
+  }
   renderItem = ({index, item}) => {
-    console.log(item);
+    // console.log(item);
     const backgroundColor =
       item.id === this.state.selectedId ? '#dfb' : '#fff';
     return (
@@ -91,18 +76,30 @@ export default class index extends Component {
         style={[styles.listContainer, {backgroundColor}]}
         onPress={() => {
           this.setState({selectedId: item.id});
-          this.props.navigation.navigate('ChangeKnowledge')
-        }}>
+          this.props.navigation.navigate('ChangeKnowledge');
+          this.props.GetKnowledgeId(item.id);
+        }}
+        onLongPress={() => 
+          Alert.alert(
+            '提示',
+            '确定要删除吗?',
+            [
+                {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: '确定', onPress: () => console.log('OK Pressed')},
+            ]
+        )}
+        // selectable={true}
+        >
         {/* 左上角标题 */}
         <Text style={styles.title}>{item.title}</Text>
 
         {/* 居中内容 */}
         <View style={styles.centerContainer}>
-          <Text style={styles.itemData}>{item.data}</Text>
+          <Text style={styles.itemData}>{item.description}</Text>
         </View>
 
         {/* 右下角时间 */}
-        <Text style={styles.time}>{item.dateTime}</Text>
+        <Text style={styles.time}>{item.createTime.substring(0, 10)}</Text>
 
       </TouchableOpacity>
     );
@@ -112,9 +109,33 @@ export default class index extends Component {
       isLoading: true,
     });
     setTimeout(() => {
+      const coords = {
+        token: this.props.token,
+      }
       //模拟请求数据
-      alert('刷新请求数据');
       this.setState({isLoading: false});
+      GetKnowledgeApi(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // console.log(res.data);
+        if (res.code == 1) {
+          this.setState(
+            (prevState) => ({
+              list: res.data, // 将现有列表和新数据合并
+            }),
+            () => {
+              // 这里是 setState 的回调函数，状态更新后会执行
+              // console.log(this.state.list); // 打印更新后的列表
+            }
+          );
+        } else {
+          Alert.alert('错误', '查找数据发生错误');
+        }
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
+      });
+      
     }, 2000);
   };
   render() {
@@ -129,7 +150,7 @@ export default class index extends Component {
               <Ionicons name={'chevron-forward-outline'} size= {20} color ={'#bbb'}/>
             </View>
         </TouchableOpacity>
-      
+
         <FlatList
           data={this.state.list}
           renderItem={this.renderItem}
@@ -152,9 +173,9 @@ export default class index extends Component {
           //下拉刷新
           refreshing={this.state.isLoading}
           onRefresh={this.loadData}
-          // 上拉加载
+          // 上拉加载 
           // onEndReachedThreshold设置列表触底还剩多少刷新0.1表示列表还剩10%的时候刷新
-          onEndReachedThreshold={0.1}
+          // onEndReachedThreshold={0.1}
           // onEndReached={() => {
           //   //此处为上拉加载的具体逻辑代码
           //   Alert.alert('到底了');
@@ -163,15 +184,17 @@ export default class index extends Component {
           //   //声明列表的头部组件
           //   return <Text style={[styles.header]}>列表头部</Text>;
           // }}
-          ListFooterComponent={() => {
-            //声明列表的头部组件
-            return <Text style={[styles.footer]}>没有更多了</Text>;
-          }}
+          // ListFooterComponent={() => {
+          //   //声明列表的头部组件
+          //   return <Text style={[styles.footer]}>没有更多了</Text>;
+          // }}
         />
       </SafeAreaView>
     )
   }
 }
+
+export default connect(mapStateToProps, {GetKnowledgeId})(index)
 
 const styles = StyleSheet.create({
   container: {
