@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, SafeAreaView, Dimensions, FlatList, View , TouchableOpacity, Alert} from 'react-native'
 import Ionicons from '@react-native-vector-icons/ionicons'
 import {connect} from 'react-redux'
-import { GetKnowledgeApi, GetKnowledgeApiById } from '../../API/apis';
+import { DeleteKnowledgeApiById, GetKnowledgeApi, GetKnowledgeApiById } from '../../API/apis';
 import {GetKnowledgeId} from '../../redux/actions/GetKnowledgeId'
 
 
@@ -25,7 +25,7 @@ class index extends Component {
     this.state = {
       isLoading: false,
       selectedId: null,
-      deleteId: 0,
+      // deleteId: 0,
       list: [],
     };
   }
@@ -58,14 +58,28 @@ class index extends Component {
         Alert.alert('报错', JSON.stringify(err));
       });
   }
-  handleDeleteKnowledge() {
+  handleDeleteKnowledge = (deleteId) => {
     console.log(this.props.token);
-    console.log(this.state.deleteId);
+    console.log(deleteId);
     const coords = {
       token: this.props.token,
-      knowledgeId: this.state.deleteId,
+      KnowledgeId: deleteId,
     }
-    
+    DeleteKnowledgeApiById(coords)
+      .then(res=>res.json())
+      .then((res) => {
+        // 获取数据成功
+        // console.log(res);
+        if (res.code == 1) {
+          Alert.alert('成功', '请求成功');
+          // this.props.loginSuccess(res.data);
+        } else {
+          Alert.alert('错误', '删除出现错误');
+        }
+      })
+      .catch(err => {
+        Alert.alert('报错', JSON.stringify(err));
+      });
   }
   renderItem = ({index, item}) => {
     // console.log(item);
@@ -85,7 +99,7 @@ class index extends Component {
             '确定要删除吗?',
             [
                 {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: '确定', onPress: () => console.log('OK Pressed')},
+                {text: '确定', onPress: () => this.handleDeleteKnowledge(item.id)},
             ]
         )}
         // selectable={true}

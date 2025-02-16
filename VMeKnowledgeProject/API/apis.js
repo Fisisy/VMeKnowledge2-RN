@@ -122,19 +122,14 @@ export const GetKnowledgeApiById = async coords => {
 
 export const DeleteKnowledgeApiById = async coords => {
   const url = `${totalApi}${port}/knowledge/${coords.KnowledgeId}`;
-  console.log(url);
+  // console.log(url);
   try {
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${coords.token}`,
-      },
-      body: JSON.stringify({
-        // username: coords.title,
-        // password: coords.htmlData,
-        // token: coords.token,
-      }),
+        'token': `${coords.token}`,
+      }
     });
     return response;
   } catch (error) {
