@@ -47,7 +47,7 @@ class index extends Component {
             }),
             () => {
               // 这里是 setState 的回调函数，状态更新后会执行
-              // console.log(this.state.list); // 打印更新后的列表
+              console.log(this.state.list); // 打印更新后的列表
             }
           );
         } else {
@@ -106,7 +106,17 @@ class index extends Component {
         >
         {/* 左上角标题 */}
         <Text style={styles.title}>{item.title}</Text>
+        <View style={styles.visibleContainer}>
+        {
+          item.visibility == 1 ? 
+          <Ionicons name={'eye-outline'} size={20} color ={'#bbb'}/>
+          :
+          <Ionicons name={'eye-off-outline'} size={20} color ={'#bbb'}/>
+          
+        }
 
+          {/* <Ionicons name={'eye-outline'} size= {20} color ={'#bbb'}/> */}
+        </View>
         {/* 居中内容 */}
         <View style={styles.centerContainer}>
           <Text style={styles.itemData}>{item.description}</Text>
@@ -308,4 +318,12 @@ const styles = StyleSheet.create({
     // 防止内容与边角元素重叠
     marginVertical: 24,
   },
+  visibleContainer: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    fontSize: 10,
+    fontWeight: '200',
+    color: '#2c3e50',
+  }
 })
